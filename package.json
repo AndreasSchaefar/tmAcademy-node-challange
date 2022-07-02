@@ -20,6 +20,7 @@
   "homepage": "https://github.com/AndreasSchaefar/tmAcademy-node-challange#readme",
   "devDependencies": {
     "express": "^4.18.1",
-    "inquirer": "^9.0.0"
+    "inquirer": "^9.0.0",
+    "js-yaml": "^4.1.0"
   }
 }

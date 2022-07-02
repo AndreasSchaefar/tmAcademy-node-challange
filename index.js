@@ -82,13 +82,16 @@ inquirer
       readFileAtPath(fileNamePath).then((file) => {
         if (isJson(fileExt)) {
           file = JSON.parse(file);
-          variables.forEach((v) => {
-            html = html.replace(v, file[getKey(v)]);
-          });
         } else if (isYaml(fileExt)) {
-          console.log("I can't read YAML yet");
+          file = yaml.load(file);
         }
+        variables.forEach((v) => {
+          const key = getKey(v);
+          html = html.replace(v, file[key] || 'Error');
+        });
+
         console.log(html);
+        // console.log(html);
       });
     });
   })

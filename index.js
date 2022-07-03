@@ -1,78 +1,38 @@
 #!/usr/bin/env node
-import { validateFileJsonYaml, validateTemplateIsHtml } from './validators.js';
-import { FileExtensionValidationError } from './errors.js';
 import inquirer from 'inquirer';
 import * as fs from 'node:fs/promises';
 import * as yaml from 'js-yaml';
 import { basename } from 'path';
-
-const questions = [
-  {
-    type: 'input',
-    name: 'htmlTemplatePath',
-    message: 'Path to the html template: ',
-    validate: (input) => {
-      return new Promise((resolve, reject) => {
-        const [valid, ext] = validateTemplateIsHtml(input);
-        if (!valid) {
-          reject(
-            new FileExtensionValidationError(
-              `${ext || 'The path ending'} extensioon does not match .html`,
-            ),
-          );
-        }
-        resolve(valid);
-      });
-    },
-  },
-  {
-    type: 'input',
-    name: 'fileNamePath',
-    message: 'Path to the data file: ',
-    validate: (input) => {
-      return new Promise((resolve, reject) => {
-        const [valid, ext] = validateFileJsonYaml(input);
-        if (!valid) {
-          reject(
-            new FileExtensionValidationError(
-              `${
-                ext || 'The path ending'
-              } extensioon does not match .json nor .yaml`,
-            ),
-          );
-        }
-        resolve(valid);
-      });
-    },
-  },
-];
-
-const literalsRegex = /(?<=\$\().*?(?=\))/;
-const templateRegex = /\$\(([^)]+)\)/g;
+import { isYaml, isJson } from './validators.js';
+import { InvalidPathError } from './errors.js';
+import { QUESTIONS } from './questions.js';
+import { templateRegex, literalsRegex } from './regex.js';
+import * as http from 'http';
 
 async function readFileAtPath(path) {
   try {
     const data = await fs.readFile(path, { encoding: 'utf8' });
     return data;
   } catch (e) {
-    console.log('sosi huy debil blyamb');
+    throw new InvalidPathError(e.message);
   }
 }
 
-function isJson(ext) {
-  return ext === 'json';
+function serveHtml(html) {
+  const server = http.createServer((_, res) => {
+    res.writeHead(200, { 'content-type': 'text/html' });
+    res.end(html);
+  });
+  server.listen('3000');
+  console.log('Serving html on port: 3000.\nUse Control + C to abort.');
 }
 
-function isYaml(ext) {
-  return ext === 'yaml';
-}
-
-function getKey(str) {
+function getVariableKey(str) {
   return str.match(literalsRegex)[0];
 }
 
 inquirer
-  .prompt(questions)
+  .prompt(QUESTIONS)
   .then((answers) => {
     const { htmlTemplatePath, fileNamePath } = answers;
     const [_, fileExt] = basename(fileNamePath).split('.');
@@ -86,12 +46,11 @@ inquirer
           file = yaml.load(file);
         }
         variables.forEach((v) => {
-          const key = getKey(v);
-          html = html.replace(v, file[key] || 'Error');
+          const key = getVariableKey(v);
+          html = html.replace(v, file[key]);
         });
 
-        console.log(html);
-        // console.log(html);
+        serveHtml(html);
       });
     });
   })

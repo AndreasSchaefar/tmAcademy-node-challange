@@ -1,25 +1,20 @@
 {
   "name": "tmacademy-node-challange",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Node.js basic dynamic template handler.",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AndreasSchaefar/tmAcademy-node-challange.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andriy Skachko",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AndreasSchaefar/tmAcademy-node-challange/issues"
   },
   "homepage": "https://github.com/AndreasSchaefar/tmAcademy-node-challange#readme",
   "devDependencies": {
-    "express": "^4.18.1",
     "inquirer": "^9.0.0",
     "js-yaml": "^4.1.0"
   }

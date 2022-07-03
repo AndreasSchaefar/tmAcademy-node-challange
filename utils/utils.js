@@ -17,8 +17,10 @@ function serveHtml(html) {
     res.writeHead(200, { 'content-type': 'text/html' });
     res.end(html);
   });
-  server.listen('3000');
-  console.log('Serving html on port: 3000.\nUse Control + C to abort.');
+  let port = 3000;
+  server.listen(port, () => {
+    console.log(`Serving html on port: ${port}.\nUse Control + C to abort.`);
+  });
 }
 
 function getVariableKey(str) {

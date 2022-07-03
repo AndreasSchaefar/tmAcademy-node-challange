@@ -6,7 +6,7 @@ class FileExtensionValidationError extends Error {
 }
 
 class InvalidPathError extends Error {
-  constructor(mesasge) {
+  constructor(message) {
     super(message);
     this.name = 'InvalidPathError';
   }

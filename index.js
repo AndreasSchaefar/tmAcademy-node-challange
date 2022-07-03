@@ -2,10 +2,10 @@
 import inquirer from 'inquirer';
 import * as yaml from 'js-yaml';
 import { basename } from 'path';
-import { isYaml, isJson } from './validators.js';
+import { isYaml, isJson } from './utils/validators.js';
+import { templateRegex } from './utils/regex.js';
+import { readFileAtPath, serveHtml, getVariableKey } from './utils/utils.js';
 import { QUESTIONS } from './questions.js';
-import { templateRegex } from './regex.js';
-import { readFileAtPath, serveHtml, getVariableKey } from './utils.js';
 
 inquirer
   .prompt(QUESTIONS)

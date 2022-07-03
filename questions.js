@@ -1,8 +1,8 @@
-import { FileExtensionValidationError } from './errors.js';
+import { FileExtensionValidationError } from './utils/errors.js';
 import {
   validateFileJsonYaml,
   validateTemplateIsHtml,
-} from './validators.js';
+} from './utils/validators.js';
 
 export const QUESTIONS = [
   {
@@ -15,9 +15,7 @@ export const QUESTIONS = [
         if (!valid) {
           reject(
             new FileExtensionValidationError(
-              `${
-                ext || 'The path ending'
-              } extensioon does not match .html`,
+              `${ext || 'The path ending'} extensioon does not match .html`,
             ),
           );
         }
